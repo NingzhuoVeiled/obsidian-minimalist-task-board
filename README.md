@@ -51,7 +51,7 @@ This inserts a dashboard that scans your entire vault for tasks.
 ### Task format
 
 Write tasks as standard Obsidian Markdown task lists with inline metadata tags:
-
+> All tags are optional. Tasks without tags still appear on the board; they just won't have metadata-driven sorting or highlighting.
 ```markdown
 - [ ] Finish project report [due:: 2026-07-25] [area::work] [priority::high]
   - [ ] Collect data
