@@ -48,13 +48,17 @@ BRAT will automatically check for updates and install new versions as they are r
 
 This inserts a dashboard that scans your entire vault for tasks.
 
+### Jump to Target Task
+- Jump to a specific task globally: use global search `Ctrl + Shift + F`
+- Jump to a specific task on the current page: `Ctrl + F`
+
 ### Task format
 
 Write tasks as standard Obsidian Markdown task lists with inline metadata tags:
 > All tags are optional. Tasks without tags still appear on the board; they just won't have metadata-driven sorting or highlighting.
 ```markdown
-- [ ] Finish project report [due:: 2026-07-25] [area::work] [priority::high]
-  - [ ] Collect data
+- [ ] Finish project report [due:: 2026-07-25] [area::work] 
+  - [ ] Collect data [priority::high]
   - [x] Write outline
 - [ ] Buy milk [due:: 2026-07-20] [area::life] [priority::low]
 ```
