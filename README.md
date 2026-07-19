@@ -15,6 +15,7 @@ A high-performance, zero-dependency task board plugin for Obsidian.
 - **Subtask progress bar** — Auto-calculates child task completion percentage
 - **Glow strip** — Red highlight strip for today's due items, dynamic hover strip
 - **Dual-layer config** — Global defaults + code-block overrides, flexible per-note
+- **Bilingual UI** — Settings panel supports Chinese and English
 
 ## Installation
 
@@ -33,21 +34,23 @@ A high-performance, zero-dependency task board plugin for Obsidian.
 
 BRAT will automatically check for updates and install new versions as they are released.
 
-## Quick Start
+## Usage Guide
 
 ### Insert a dashboard
 
 - `Ctrl+P` → Search "Minimalist Task Board: Insert dashboard"
-- Or manually enter:
+- Or manually enter in any note:
 
 ````markdown
 ```task-dashboard
 ```
 ````
 
+This inserts a dashboard that scans your entire vault for tasks.
+
 ### Task format
 
-Use standard Markdown task lists with inline metadata tags:
+Write tasks as standard Obsidian Markdown task lists with inline metadata tags:
 
 ```markdown
 - [ ] Finish project report [due:: 2026-07-25] [area::work] [priority::high]
@@ -56,21 +59,77 @@ Use standard Markdown task lists with inline metadata tags:
 - [ ] Buy milk [due:: 2026-07-20] [area::life] [priority::low]
 ```
 
+Metadata tags are placed **inline** after the task text, inside `[key::value]` brackets.
+
 ### Metadata tags
 
 | Tag | Required | Description | Example |
 |------|----------|-------------|---------|
 | `[due:: YYYY-MM-DD]` | No | Due date | `[due:: 2026-07-25]` |
-| `[area::xxx]` | No | Area | `[area::work]` / `life` / `study` |
-| `[priority::xxx]` | No | Priority | `[priority::high]` / `middle` / `low` |
+| `[area::xxx]` | No | Area category | `[area::work]` / `life` / `study` |
+| `[priority::xxx]` | No | Priority level | `[priority::high]` / `middle` / `low` |
 
-### Code block config
+> All tags are optional. Tasks without tags still appear on the board; they just won't have metadata-driven sorting or highlighting.
 
-Write JSON inside the code block to override specific settings:
+### Subtask progress
+
+Indented tasks under a parent task are automatically treated as subtasks:
+
+```markdown
+- [ ] Write blog post [due:: 2026-08-01] [area::work] [priority::high]
+  - [x] Research topic
+  - [x] Draft outline
+  - [ ] Write first draft
+  - [ ] Proofread
+```
+
+The board will show a progress bar (50% in this example) and a "2/4" count for the parent task.
+
+### Area filter
+
+Once a dashboard is rendered, click the **All / Work / Life / Study** buttons at the top to filter tasks by area. Only tasks matching the selected area (or all areas) are shown.
+
+### Sorting behavior
+
+The default sort order is:
+
+1. **Today's tasks** pinned to top (when `highlightToday` is on)
+2. **Tasks with metadata** ranked before tasks without (when `pinMetadata` is on)
+3. **Primary sort** by `priority` (high → middle → low) or by `due` date
+4. Completed tasks positioned by `completedPosition` setting
+
+You can change the primary sort key and direction in settings or per code block.
+
+### Glow strips
+
+- **Today strip** — A colored bar on the left edge of tasks due today (or overdue). Red by default.
+- **Hover strip** — A colored bar that appears when hovering over any task row.
+
+Strip colors can be customized in the settings panel or per code block.
+
+### Settings panel
+
+Open **Settings → Minimalist Task Board** to configure global defaults. The panel is organized into four sections:
+
+| Section | What you can set |
+|---------|-----------------|
+| **General** | Search path, show/hide completed tasks, completed task position |
+| **Sorting** | Primary sort key, sort order, pin metadata tasks |
+| **Highlighting & Display** | Remaining days, today highlight, today position |
+| **Glow Sidebar** | Enable/disable strips, strip colors |
+
+A built-in tutorial is displayed at the bottom of the settings panel.
+
+Switch between Chinese and English via the **Language / 语言** dropdown at the top.
+
+### Per-dashboard config (code block overrides)
+
+Write JSON inside the `task-dashboard` code block to override global settings for that specific dashboard. Only include the keys you want to change:
 
 ````markdown
 ```task-dashboard
 {
+  "searchPath": "Projects/",
   "primarySort": "due",
   "showCompleted": false,
   "todayStripColor": "#00ff00"
@@ -78,7 +137,27 @@ Write JSON inside the code block to override specific settings:
 ```
 ````
 
-## Configuration
+This example: scans only the `Projects/` folder, sorts by due date, hides completed tasks, and uses a green today strip.
+
+### Custom columns
+
+You can redefine the table columns globally or per code block:
+
+```json
+{
+  "columns": [
+    { "header": "Task", "width": "50%", "key": "text" },
+    { "header": "Area", "width": "10%", "key": "area" },
+    { "header": "Priority", "width": "10%", "key": "priority" },
+    { "header": "Left", "width": "10%", "key": "remaining" },
+    { "header": "Due", "width": "20%", "key": "due" }
+  ]
+}
+```
+
+Valid column keys: `text`, `area`, `priority`, `remaining`, `due`.
+
+## Configuration reference
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
@@ -86,8 +165,8 @@ Write JSON inside the code block to override specific settings:
 | `primarySort` | `"priority"` / `"due"` | `"priority"` | Primary sort key |
 | `sortOrder` | `"asc"` / `"desc"` | `"asc"` | Sort direction |
 | `pinMetadata` | boolean | `true` | Pin tasks with metadata to top |
-| `showRemainingDays` | boolean | `true` | Show remaining days |
-| `highlightToday` | boolean | `true` | Highlight tasks due today |
+| `showRemainingDays` | boolean | `true` | Show remaining days in the Left column |
+| `highlightToday` | boolean | `true` | Pin today's due tasks to top or bottom |
 | `todayPosition` | `"top"` / `"bottom"` | `"top"` | Position of today's tasks |
 | `showCompleted` | boolean | `true` | Show completed tasks |
 | `completedPosition` | `"top"` / `"bottom"` | `"bottom"` | Position of completed tasks |
@@ -96,8 +175,7 @@ Write JSON inside the code block to override specific settings:
 | `enableHoverStrip` | boolean | `true` | Hover glow strip |
 | `hoverStripColor` | string | `"#ffffff"` | Hover strip color |
 | `columns` | Column[] | 5 columns | Column definitions |
-
-Columns format: `{ "header": "Name", "width": "percent", "key": "field" }`. Key values: `text`, `area`, `priority`, `remaining`, `due`.
+| `language` | `"zh"` / `"en"` | `"zh"` | Settings panel language |
 
 ## Development
 
