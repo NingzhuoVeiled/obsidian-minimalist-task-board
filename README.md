@@ -34,7 +34,7 @@ A high-performance, zero-dependency task board plugin for Obsidian.
 3. Enter the repo URL: `NingzhuoVeiled/obsidian-minimalist-task-board`
 4. Enable "Minimalist Task Board" in Settings → Community plugins
 
-BRAT will automatically check for updates and install new versions as they are released.
+BRAT will automatically check for updates and install new versions as they are released
 
 ## Quick Start
 
