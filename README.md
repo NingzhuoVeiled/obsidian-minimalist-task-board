@@ -1,11 +1,11 @@
-<!-- Language switcher -->
 <p align="right">
   <a href="#english">English</a> | <a href="#chinese">中文</a>
 </p>
 
----
+<details open id="english">
+<summary><b>English</b></summary>
 
-<h1 id="english">Minimalist Task Board — Obsidian Plugin</h1>
+<h1>Minimalist Task Board — Obsidian Plugin</h1>
 
 A high-performance, zero-dependency task board plugin for Obsidian.
 
@@ -34,7 +34,7 @@ A high-performance, zero-dependency task board plugin for Obsidian.
 3. Enter the repo URL: `NingzhuoVeiled/obsidian-minimalist-task-board`
 4. Enable "Minimalist Task Board" in Settings → Community plugins
 
-BRAT will automatically check for updates and install new versions as they are released
+BRAT will automatically check for updates and install new versions as they are released.
 
 ## Quick Start
 
@@ -116,9 +116,12 @@ After building, `main.js` and `styles.css` are the complete plugin files.
 
 MIT
 
----
+</details>
 
-<h1 id="chinese">Minimalist Task Board — Obsidian 插件</h1>
+<details id="chinese">
+<summary><b>中文</b></summary>
+
+<h1>Minimalist Task Board — Obsidian 插件</h1>
 
 高性能、零依赖的任务看板插件。
 
@@ -228,3 +231,5 @@ npm run build  # 生产构建
 ## 许可
 
 MIT
+
+</details>
