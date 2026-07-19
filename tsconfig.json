@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "baseUrl": ".",
+    "paths": { "*": ["node_modules/*"] },
+    "importHelpers": false,
+    "sourceMap": false,
+    "inlineSourceMap": false,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*.ts"]
+}

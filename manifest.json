@@ -1,0 +1,10 @@
+{
+  "id": "minimalist-task-board",
+  "name": "Minimalist Task Board",
+  "version": "1.0.0",
+  "minAppVersion": "1.0.0",
+  "description": "高性能任务看板，支持优先级排序、到期日高亮、Area 过滤、子任务进度条",
+  "author": "Ningzhuo",
+  "authorUrl": "https://github.com/NingzhuoVeiled",
+  "isDesktopOnly": false
+}

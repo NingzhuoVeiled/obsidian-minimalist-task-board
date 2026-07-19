@@ -1,0 +1,214 @@
+/* --- 任务中心：未来极光布局 + 自由换色动态侧边条（紧凑版） --- */
+
+/* 1. 全局表格容器 */
+.dataview.table-view-table {
+    background: rgba(var(--background-primary-rgb), 0.4) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 10px;
+    border: 1px solid rgba(var(--interactive-accent-rgb), 0.15);
+    box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+/* 2. 表头 */
+.dataview.table-view-table th {
+    background: rgba(var(--background-secondary-rgb), 0.8) !important;
+    border-bottom: 2px solid var(--interactive-accent) !important;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 6px 12px !important;
+}
+
+/* 3. 核心：单元格与响应式侧边条 */
+.dataview.table-view-table td {
+    vertical-align: middle;
+    padding: 4px 12px !important;
+    word-break: break-word;
+    white-space: normal;
+    border-bottom: 1px solid rgba(var(--background-modifier-border-rgb), 0.3);
+}
+
+/* 第一列 td 作为定位基准 */
+.dataview.table-view-table tbody tr td:first-child {
+    position: relative !important;
+    padding-left: 16px !important;
+}
+
+/* 【功能一：Left 为 0 时的常驻侧边条】只有在配置 enableTodayStrip: true 时生效 */
+.enable-today-strip .dataview.table-view-table tbody tr:has(.days-zero) td:first-child::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: 4px !important;
+    background-color: var(--today-strip-color, #ff4d4d) !important;
+}
+
+/* 今日到期（Left 为 0）的整行保持极柔和的微光底色 */
+.dataview.table-view-table tbody tr:has(.days-zero) {
+    background: rgba(255, 77, 77, 0.01) !important;
+}
+
+/* 【功能二：悬停时动态显现/覆盖侧边条】只有在配置 enableHoverStrip: true 时生效 */
+.enable-hover-strip .dataview.table-view-table tbody tr:hover td:first-child::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: 4px !important;
+    background-color: var(--hover-strip-color, #7000ff) !important;
+}
+
+/* 行悬浮轻微右移偏移动画 */
+.dataview.table-view-table tbody tr {
+    transition: all 0.2s ease;
+}
+.dataview.table-view-table tbody tr:hover {
+    background: rgba(var(--interactive-accent-rgb), 0.05) !important;
+    transform: translateX(2px);
+}
+
+/* 4. 任务文本与已完成淡化效果 */
+.task-text-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.task-text-line {
+    font-weight: 600;
+    color: var(--text-normal);
+    line-height: 1.3;
+}
+
+/* 已完成任务整体外观控制 */
+.dataview.table-view-table tbody tr:has(.task-is-completed) {
+    opacity: 0.45;
+}
+.task-is-completed .task-text-line {
+    text-decoration: line-through;
+    color: var(--text-muted);
+}
+
+/* 精致迷你进度条 */
+.task-progress-bar-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+}
+.progress-text {
+    font-size: 0.7em;
+    font-family: var(--font-monospace);
+    color: var(--text-muted);
+    min-width: 24px;
+}
+.progress-track {
+    flex: 1;
+    height: 4px;
+    background: rgba(var(--text-muted-rgb), 0.15);
+    border-radius: 10px;
+    overflow: hidden;
+}
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00f2fe, #4facfe);
+    border-radius: 10px;
+}
+
+/* 行内代码 <code> 标签 */
+.dataview.table-view-table td code {
+    background: rgba(var(--interactive-accent-rgb), 0.08) !important;
+    color: var(--text-accent) !important;
+    padding: 1px 4px;
+    border-radius: 4px;
+    font-family: var(--font-monospace);
+    font-size: 0.82em;
+    border: 1px solid rgba(var(--interactive-accent-rgb), 0.15);
+}
+
+/* 5. Pill 标签体积 */
+.pill {
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    text-align: center;
+    display: inline-block;
+    min-width: 48px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+/* 优先级 Pill 颜色 */
+.priority-high { background: linear-gradient(135deg, #ff4d4d, #f98282); color: white; }
+.priority-middle { background: linear-gradient(135deg, #ffa500, #ffc866); color: white; }
+.priority-low { background: linear-gradient(135deg, #4caf50, #81c784); color: white; }
+.priority-none { color: var(--text-muted); font-size: 1.1em; background: transparent; box-shadow: none; }
+
+/* 区域 Pill 颜色 */
+.area-work { background: linear-gradient(135deg, #5d7a8c, #7b9bab); color: white; }
+.area-life { background: linear-gradient(135deg, #8b6c87, #a68ba1); color: white; }
+.area-study { background: linear-gradient(135deg, #5f8d72, #7aaa8d); color: white; }
+.area-none { color: var(--text-muted); font-size: 1.1em; background: transparent; box-shadow: none; }
+
+/* 6. 剩余天数颜色与已完成勾选 */
+.days-zero {
+    color: var(--text-normal) !important;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 1px 5px;
+    border-radius: 6px;
+    border: 1px solid var(--background-modifier-border);
+}
+.days-pos { color: #4caf50; font-weight: bold; }
+.days-neg { color: #ff4d4d; font-weight: bold; }
+.days-completed { color: #4caf50; font-weight: 900; font-size: 1.1em; }
+
+/* 7. 顶部 Area 切换按钮 */
+.area-filter-container {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+    background: rgba(var(--background-secondary-rgb), 0.5);
+    padding: 3px;
+    border-radius: 8px;
+    width: fit-content;
+    border: 1px solid rgba(var(--background-modifier-border-rgb), 0.4);
+}
+
+.area-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 4px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+}
+
+.area-btn:hover {
+    color: var(--text-normal);
+    background: rgba(var(--background-primary-rgb), 0.7);
+}
+
+.area-btn.active {
+    color: #ffffff !important;
+    font-weight: 700;
+}
+.area-btn-all.active { background: #6b7280; box-shadow: 0 1px 4px rgba(107, 114, 128, 0.3); }
+.area-btn-work.active { background: #5d7a8c; box-shadow: 0 1px 4px rgba(93, 122, 140, 0.3); }
+.area-btn-life.active { background: #8b6c87; box-shadow: 0 1px 4px rgba(139, 108, 135, 0.3); }
+.area-btn-study.active { background: #5f8d72; box-shadow: 0 1px 4px rgba(95, 141, 114, 0.3); }
