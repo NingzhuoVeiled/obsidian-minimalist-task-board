@@ -33,10 +33,10 @@ const T = {
     asc: "升序",
     desc: "降序",
     tutorialMD: `
-## Task Dashboard 使用教程
+## Minimalist Task Board 使用教程
 
 ### 插入面板
-- **Ctrl+P** → 搜索 "插入 Task Dashboard" → 在光标处插入完整面板代码块
+- **Ctrl+P** → 搜索 "Minimalist Task Board: 插入看板" → 在光标处插入完整面板代码块
 - 或手动输入 \\\`\\\`\\\`task-dashboard
 
 ### 代码块配置
@@ -93,10 +93,10 @@ const T = {
     asc: "Ascending",
     desc: "Descending",
     tutorialMD: `
-## Task Dashboard Usage Guide
+## Minimalist Task Board Usage Guide
 
 ### Insert Dashboard
-- **Ctrl+P** → search "Insert Task Dashboard" → inserts a full dashboard code block at cursor
+- **Ctrl+P** → search "Minimalist Task Board: Insert dashboard" → inserts a full dashboard code block at cursor
 - Or type manually: \\\`\\\`\\\`task-dashboard
 
 ### Code Block Configuration

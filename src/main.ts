@@ -32,7 +32,7 @@ export default class TaskDashboardPlugin extends Plugin {
     // 注册命令：插入看板
     this.addCommand({
       id: "insert-task-dashboard",
-      name: "插入 Task Dashboard",
+      name: "Minimalist Task Board: 插入看板",
       editorCallback: (editor) => {
         const defaultConfig = JSON.stringify(this.settings, null, 2)
           // 嵌套缩进 columns 数组
@@ -41,7 +41,7 @@ export default class TaskDashboardPlugin extends Plugin {
 
         const codeBlock = "```task-dashboard\n" + defaultConfig + "\n```\n";
         editor.replaceSelection(codeBlock);
-        new Notice("Task Dashboard 已插入");
+        new Notice("看板已插入");
       },
     });
 
