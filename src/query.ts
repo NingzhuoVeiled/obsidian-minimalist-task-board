@@ -27,6 +27,15 @@ export class TaskQueryEngine {
 	}
 
 	/**
+	 * Remove a file from the cache entirely (called when file is deleted/renamed).
+	 */
+	invalidateFile(filePath: string): void {
+		this.taskCache.delete(filePath);
+		this.dirtyFiles.delete(filePath);
+		this.resultDirty = true;
+	}
+
+	/**
 	 * Invalidate all caches (called on config change, e.g. searchPath).
 	 */
 	invalidateAll(): void {

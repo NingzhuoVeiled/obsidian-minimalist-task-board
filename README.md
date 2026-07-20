@@ -9,7 +9,7 @@ A high-performance, zero-dependency task board plugin for Obsidian.
 ## Features
 
 - **Zero dependencies** — Built on Obsidian's native MetadataCache; no Dataview or other plugins required
-- **Smart auto-refresh** — Tracks active dashboards and re-renders them directly on metadata changes, avoiding full workspace re-parsing
+- **Real-time live refresh** — Like Dataview, watches vault file changes (modify/create/delete/rename) and refreshes dashboards instantly without page reload
 - **Smart sorting** — Sort by priority or due date; items due today auto-pin to top
 - **Area filter** — One-click toggle between Work / Life / Study areas
 - **Subtask progress bar** — Auto-calculates child task completion percentage

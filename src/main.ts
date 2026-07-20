@@ -8,6 +8,7 @@ import { TaskDashboardRenderer } from "./renderer";
 export default class TaskDashboardPlugin extends Plugin {
   settings!: DashboardConfig;
   queryEngine!: TaskQueryEngine;
+  dashboardElements: Map<HTMLElement, DashboardConfig> = new Map();
 
   async onload(): Promise<void> {
     // 加载设置
@@ -45,18 +46,39 @@ export default class TaskDashboardPlugin extends Plugin {
       },
     });
 
-    // 监听 MetadataCache 变更
+    const refresh = () => this.refreshDashboards();
+
+    // Vault events: fire on actual file I/O — essential for real-time updates
+    this.registerEvent(this.app.vault.on("modify", (file) => {
+      this.queryEngine.markDirty(file.path);
+      refresh();
+    }));
+    this.registerEvent(this.app.vault.on("create", () => {
+      this.queryEngine.setAllDirty();
+      refresh();
+    }));
+    this.registerEvent(this.app.vault.on("delete", (file) => {
+      this.queryEngine.invalidateFile(file.path);
+      refresh();
+    }));
+    this.registerEvent(this.app.vault.on("rename", (file, oldPath) => {
+      this.queryEngine.invalidateFile(oldPath);
+      this.queryEngine.markDirty(file.path);
+      refresh();
+    }));
+
+    // MetadataCache events: fallback for metadata-only changes
     this.registerEvent(
       this.app.metadataCache.on("changed", (file) => {
         this.queryEngine.markDirty(file.path);
-        this.refreshActiveCodeBlocks();
+        refresh();
       })
     );
 
     this.registerEvent(
       this.app.metadataCache.on("resolved", () => {
         this.queryEngine.setAllDirty();
-        this.refreshActiveCodeBlocks();
+        refresh();
       })
     );
   }
@@ -65,6 +87,7 @@ export default class TaskDashboardPlugin extends Plugin {
     // 清理动态样式
     const styleEl = document.getElementById("task-dashboard-dynamic-style");
     if (styleEl) styleEl.remove();
+    this.dashboardElements.clear();
   }
 
   /**
@@ -101,19 +124,32 @@ export default class TaskDashboardPlugin extends Plugin {
       // 获取排序后任务
       const tasks = this.queryEngine.getTasksSync(mergedConfig);
 
-      // 渲染
+      // 渲染并注册到活跃面板列表
       const renderer = new TaskDashboardRenderer();
       renderer.render(el, mergedConfig, tasks);
+      this.dashboardElements.set(el, mergedConfig);
     };
   }
 
   /**
-   * 刷新当前活跃的代码块
-   * Force re-render by triggering workspace update on metadata changes.
-   * This causes Obsidian to re-process all code blocks via MarkdownPostProcessor.
+   * 直接刷新所有活跃的 dashboard 面板，无需通过 MarkdownPostProcessor 重解析。
    */
-  private refreshActiveCodeBlocks(): void {
-    this.app.workspace.updateOptions();
+  async refreshDashboards(): Promise<void> {
+    const seen = new Set<string>();
+    for (const [el, config] of this.dashboardElements) {
+      if (!el.isConnected) {
+        this.dashboardElements.delete(el);
+        continue;
+      }
+      const key = JSON.stringify(config);
+      if (this.queryEngine.isDirty() && !seen.has(key)) {
+        await this.queryEngine.rebuildCache(config);
+        seen.add(key);
+      }
+      const tasks = this.queryEngine.getTasksSync(config);
+      const renderer = new TaskDashboardRenderer();
+      renderer.render(el, config, tasks);
+    }
   }
 }
 

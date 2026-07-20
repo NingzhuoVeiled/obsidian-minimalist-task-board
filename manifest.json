@@ -1,7 +1,7 @@
 {
   "id": "minimalist-task-board",
   "name": "Minimalist Task Board",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "minAppVersion": "1.0.0",
   "description": "High-performance task board with priority sorting, due date highlighting, Area filtering, and subtask progress bars.",
   "author": "Ningzhuo",
